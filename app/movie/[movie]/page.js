@@ -6,23 +6,30 @@ async function getMovie(movie) {
 	);
 	return res.json();
 }
-async function getSimilar(movie){
+async function getSimilar(movie) {
 	const res = await fetch(
 		`https://api.themoviedb.org/3/movie/${movie}/similar?api_key=${key}`
 	);
 	return res.json();
 }
+async function getProviders(movie) {
+	const res = await fetch(
+		`https://api.themoviedb.org/3/movie/${movie}/videos?api_key=${key}`
+	);
+	return res.json();
+}
 
 export default async function Page({ params: { movie } }) {
-
 	const movieData = getMovie(movie);
-	const similarData = getSimilar(movie)
+	const similarData = getSimilar(movie);
+	const providerData = getProviders(movie);
+	const [p] = await Promise.all([providerData]);
 	const [s] = await Promise.all([similarData]);
-	const [m ] = await Promise.all([movieData]);
+	const [m] = await Promise.all([movieData]);
 	return (
 		<div className="movie">
 			<div className="img-div">
-				<img src={"https://image.tmdb.org/t/p/w500/" + m.poster_path} />
+				<img src={"https://image.tmdb.org/t/p/w400/" + m.poster_path} />
 			</div>
 			<div className="info-div">
 				{" "}
